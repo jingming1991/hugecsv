@@ -2,7 +2,7 @@ package com.kfzteile24.spark.stage;
 
 
 import com.google.inject.Injector;
-import com.kfzteile24.core.InjecotrFactory;
+import com.kfzteile24.core.InjectorFactory;
 import com.kfzteile24.entity.FilePayLoad;
 import com.kfzteile24.service.IFileConvertService;
 import com.kfzteile24.spark.injector.FlatMapFunctionInjector;
@@ -12,15 +12,15 @@ import java.util.*;
 public class FileConvertStage extends FlatMapFunctionInjector<Iterator<String>, FilePayLoad> {
 
 
-    private InjecotrFactory injecotrFactory;
+    private InjectorFactory injectorFactory;
 
-    public FileConvertStage(InjecotrFactory injecotrFactory) {
-        this.injecotrFactory = injecotrFactory;
+    public FileConvertStage(InjectorFactory injectorFactory) {
+        this.injectorFactory = injectorFactory;
     }
 
     @Override
     public Iterator<FilePayLoad> call(Iterator<String> stringIterator) {
-        Injector injector = getInjector(injecotrFactory);
+        Injector injector = getInjector(injectorFactory);
         IFileConvertService fileConvert = injector.getInstance(IFileConvertService.class);
 
         List<FilePayLoad> results = new ArrayList<>();

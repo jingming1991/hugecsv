@@ -1,7 +1,7 @@
 package com.kfzteile24.spark;
 
 
-import com.kfzteile24.core.InjecotrFactory;
+import com.kfzteile24.core.InjectorFactory;
 import com.kfzteile24.entity.FilePayLoad;
 import com.kfzteile24.service.impl.MockMailSender;
 import com.kfzteile24.spark.stage.FileConvertStage;
@@ -18,20 +18,20 @@ public class SendMailByHugeFileSpark {
     private static Logger LOG = LoggerFactory.getLogger(MockMailSender.class);
 
     private JavaSparkContext javaSparkContext;
-    private InjecotrFactory injecotrFactory;
+    private InjectorFactory injectorFactory;
 
-    public void init(InjecotrFactory injecotrFactory) {
+    public void init(InjectorFactory injectorFactory) {
         SparkConf sparkConf = new SparkConf().setAppName("FileConvert").setMaster("local[1]");
         javaSparkContext = new JavaSparkContext(sparkConf);
-        this.injecotrFactory = injecotrFactory;
+        this.injectorFactory = injectorFactory;
     }
 
     public void run(String fileUrl) {
         LongAccumulator sendCounter = javaSparkContext.sc().longAccumulator("Totally send mail");
         JavaRDD<String> stringJavaRDD = javaSparkContext.textFile(fileUrl);
-        JavaRDD<FilePayLoad> filePayLoads = stringJavaRDD.mapPartitions(new FileConvertStage(injecotrFactory));
+        JavaRDD<FilePayLoad> filePayLoads = stringJavaRDD.mapPartitions(new FileConvertStage(injectorFactory));
         filePayLoads = repartition(filePayLoads.persist(StorageLevel.MEMORY_AND_DISK_2()));
-        filePayLoads.foreachPartition(new SendMailStage(injecotrFactory, sendCounter));
+        filePayLoads.foreachPartition(new SendMailStage(injectorFactory, sendCounter));
         LOG.info("Totally send mail :" + sendCounter.value());
     }
 

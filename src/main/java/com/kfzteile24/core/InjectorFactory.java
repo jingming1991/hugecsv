@@ -8,12 +8,12 @@ import com.google.inject.Singleton;
 import java.io.Serializable;
 
 @Singleton
-public class InjecotrFactory implements Serializable {
+public class InjectorFactory implements Serializable {
 
     private Injector injector;
     private Iterable<? extends Module> modules;
 
-    public InjecotrFactory(Iterable<? extends Module> modules) {
+    public InjectorFactory(Iterable<? extends Module> modules) {
         this.modules = modules;
     }
 
