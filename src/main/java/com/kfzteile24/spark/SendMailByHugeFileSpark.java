@@ -14,9 +14,6 @@ import org.apache.spark.util.LongAccumulator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class SendMailByHugeFileSpark {
     private static Logger LOG = LoggerFactory.getLogger(MockMailSender.class);
 
@@ -29,24 +26,18 @@ public class SendMailByHugeFileSpark {
         this.injecotrFactory = injecotrFactory;
     }
 
-    public void run() {
+    public void run(String fileUrl) {
         LongAccumulator sendCounter = javaSparkContext.sc().longAccumulator("Totally send mail");
-        List<String> stringList = new ArrayList<>();
-        for (int i = 1; i < 10; i++) {
-            stringList.add("jing;ming;jingming1991@gmail.com");
-            stringList.add("li;dan;xixi@126.com");
-        }
-        JavaRDD<String> stringJavaRDD = javaSparkContext.parallelize(stringList);
+        JavaRDD<String> stringJavaRDD = javaSparkContext.textFile(fileUrl);
         JavaRDD<FilePayLoad> filePayLoads = stringJavaRDD.mapPartitions(new FileConvertStage(injecotrFactory));
         filePayLoads = repartition(filePayLoads.persist(StorageLevel.MEMORY_AND_DISK_2()));
         filePayLoads.foreachPartition(new SendMailStage(injecotrFactory, sendCounter));
         LOG.info("Totally send mail :" + sendCounter.value());
-
     }
 
     private JavaRDD<FilePayLoad> repartition(JavaRDD<FilePayLoad> filePayLoads) {
         long count = filePayLoads.count();
-        int partitions = (int) Math.max(5, count / 5000);
+        int partitions = (int) Math.max(1, count / 5000);
         return filePayLoads.repartition(partitions);
     }
 

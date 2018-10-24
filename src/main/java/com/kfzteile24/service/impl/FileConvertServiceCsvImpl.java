@@ -22,15 +22,22 @@ public class FileConvertServiceCsvImpl implements IFileConvertService, Serializa
             return null;
         }
         List<String> stringList = parseFilePayLoadString(s);
-        FilePayLoad filePayLoad = new FilePayLoad(stringList.get(0), stringList.get(1), stringList.get(2));
+        FilePayLoad filePayLoad = null;
+        if (stringList.size() == 3) {
+            filePayLoad = new FilePayLoad(stringList.get(0), stringList.get(1), stringList.get(2));
+        }
         return isValidPayLoad(filePayLoad) ? filePayLoad : null;
     }
 
 
     public List<String> parseFilePayLoadString(String filePayLoad) {
-        System.out.println(filePayLoad);
+
         String[] split = filePayLoad.split(";", 3);
-        return Arrays.stream(split).collect(Collectors.toList());
+        return Arrays.stream(split)
+                .filter(StringUtils::isNoneBlank)
+                .filter(s -> s.startsWith("\"") && s.endsWith("\""))
+                .map(s -> s.substring(1, s.length() - 1))
+                .collect(Collectors.toList());
     }
 
 
