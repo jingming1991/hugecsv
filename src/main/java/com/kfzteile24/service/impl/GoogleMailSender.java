@@ -1,27 +1,17 @@
 package com.kfzteile24.service.impl;
 
 
+import com.kfzteile24.entity.FilePayLoad;
+import com.kfzteile24.service.IMailSendService;
+
 import javax.mail.*;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
-public class GoogleMailSender {
-
-    public void senmai() throws Exception {
-        Session session = getGMailSession();
-        MimeMessage message = new MimeMessage(session);
-        message.setSubject("test");
-        message.setSentDate(new Date());
-        message.setFrom(new InternetAddress("jingming1991@gmail.com"));
-        message.setRecipient(Message.RecipientType.TO, new InternetAddress("jingming1991@gmail.com"));
-        message.setContent("test11111", "text/html;charset=utf-8");
-        Transport.send(message);
-
-
-    }
+public class GoogleMailSender implements IMailSendService {
 
     public Session getGMailSession() {
         Properties props = new Properties();
@@ -37,4 +27,20 @@ public class GoogleMailSender {
         });
         return session;
     }
+
+    @Override
+    public void sendMail(FilePayLoad filePayLoad) {
+        Session session = getGMailSession();
+        MimeMessage message = new MimeMessage(session);
+        try {
+            message.setSubject("test");
+            message.setSentDate(new Date());
+            message.setFrom(new InternetAddress("jingming1991@gmail.com"));
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(filePayLoad.getEmail()));
+            Transport.send(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

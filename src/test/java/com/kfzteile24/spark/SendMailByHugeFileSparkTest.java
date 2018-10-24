@@ -15,10 +15,10 @@ public class SendMailByHugeFileSparkTest {
 
     @Test
     public void run() {
-
+        String path = getClass().getClassLoader().getResource("mail.csv").getPath();
         InjecotrFactory injecotrFactory = new InjecotrFactory(Collections.singletonList(new MyConfigModule()));
         SendMailByHugeFileSpark sendMailByHugeFileSpark = new SendMailByHugeFileSpark();
         sendMailByHugeFileSpark.init(injecotrFactory);
-        sendMailByHugeFileSpark.run("/home/dev/IdeaProjects/hugecsv/src/test/resources/mail.csv");
+        sendMailByHugeFileSpark.run(path);
     }
 }
