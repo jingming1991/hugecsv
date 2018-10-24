@@ -5,23 +5,22 @@ java 8<br/>
 Spark 2.3<br/>
 maven 3<br/>
 
-Directory Hierarchy:<br/>
-/core<br/>
-    /InjectorFactory      Guice's context<br/>
-    /MyConfigModule       Guice Configuration Class<br/>
+Directory Hierarchy:<br/>core<br/>
+&nbsp;&nbsp;/InjectorFactory &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Guice's context<br/>
+&nbsp;&nbsp;/MyConfigModule &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;       Guice Configuration Class<br/>
 /entity<br/>
-    /FilePayLoad          file.csv -> List<filePayload><br/>
+&nbsp;&nbsp;/FilePayLoad &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;          file.csv -> List<filePayload><br/>
 /service<br/>
-    IMailSendService      Interface define sending mail<br/>
-    IFileConvertService   Interface define File mail<br/>
-    /impl<br/>
-        FileConvertServiceCsvImpl<br/>
-        GoogleMailSender   Using Goolge's Server send mail (need to authorization)<br/>
-        MockMailSender     fake class just simulate mail send<br/>
+&nbsp;&nbsp;IMailSendService &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      Interface define sending mail<br/>
+&nbsp;&nbsp;IFileConvertService &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   Interface define File mail<br/>
+&nbsp;&nbsp;/impl<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;FileConvertServiceCsvImpl<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;GoogleMailSender &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   Using Goolge's Server send mail (need to authorization)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;MockMailSender &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     fake class just simulate mail send<br/>
 /spark<br/>
-    SendMailByHugeFileSpark      Main Class<br/>
-    /injector              in order to get Guice's context in spark jobs,Guice.Injector should be Singleton better<br/>
-    /stage                 different spark jobs<br/>
+&nbsp;&nbsp;SendMailByHugeFileSpark &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      Main Class<br/>
+&nbsp;&nbsp;/injector &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in order to get Guice's context in spark jobs,Guice.Injector should be Singleton better<br/>
+&nbsp;&nbsp;/stage &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;different spark jobs<br/>
 
 question<br/>
 1.Get huge file information with out memory overflow<br/>
